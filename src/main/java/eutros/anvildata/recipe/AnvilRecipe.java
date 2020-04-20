@@ -62,10 +62,18 @@ public class AnvilRecipe implements IRecipe<AnvilInventory> {
         this.itemCost = itemCost;
     }
 
+    public Ingredient getLeft() {
+        return ingredients.getLeft();
+    }
+
+    public Ingredient getRight() {
+        return ingredients.getRight();
+    }
+
     @Override
     public boolean matches(AnvilInventory inv, @Nullable World worldIn) {
-        return ingredients.getLeft().test(inv.getLeft()) &&
-                ingredients.getRight().test(inv.getRight());
+        return getLeft().test(inv.getLeft()) &&
+                getRight().test(inv.getRight());
     }
 
     @Nonnull
@@ -165,8 +173,8 @@ public class AnvilRecipe implements IRecipe<AnvilInventory> {
         @ParametersAreNonnullByDefault
         @Override
         public void write(PacketBuffer buffer, AnvilRecipe recipe) {
-            CraftingHelper.write(buffer, recipe.ingredients.getLeft());
-            CraftingHelper.write(buffer, recipe.ingredients.getRight());
+            CraftingHelper.write(buffer, recipe.getLeft());
+            CraftingHelper.write(buffer, recipe.getRight());
             buffer.writeItemStack(recipe.output);
             buffer.writeVarInt(recipe.getCost());
             buffer.writeVarInt(recipe.getMaterialCost());
