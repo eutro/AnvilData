@@ -1,0 +1,19 @@
+{
+  "type": "anvildata:anvil_recipe",
+
+  "first": {
+    "item": "minecraft:coal"
+  },
+
+  "second": {
+    "type": "forge:nbt",
+    "item": "minecraft:coal",
+    "count": 8
+  },
+
+  "cost": 2,
+
+  "result": {
+    "item": "minecraft:coal_block"
+  }
+}

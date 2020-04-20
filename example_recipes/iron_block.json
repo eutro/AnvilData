@@ -1,0 +1,18 @@
+{
+  "type": "anvildata:anvil_recipe",
+
+  "first": {
+    "type": "forge:nbt",
+    "item": "minecraft:cobblestone",
+    "nbt": "{RepairCost:0,display:{Name:'{\"text\":\"Block of Iron\"}'}}"
+  },
+  "second": {
+    "item": "minecraft:iron_ingot"
+  },
+
+  "cost": 6,
+
+  "result": {
+    "item": "minecraft:iron_block"
+  }
+}

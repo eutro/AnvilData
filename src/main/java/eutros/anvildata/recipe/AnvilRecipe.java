@@ -15,6 +15,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -24,6 +26,8 @@ public class AnvilRecipe implements IRecipe<AnvilInventory> {
 
     private static final ResourceLocation serializerID = new ResourceLocation(Reference.MOD_ID, "anvil_recipe");
     public static final IRecipeSerializer<AnvilRecipe> SERIALIZER = new Serializer();
+
+    private static final Logger LOGGER = LogManager.getLogger();
 
     public static final IRecipeType<AnvilRecipe> TYPE =
             new IRecipeType<AnvilRecipe>() {
@@ -125,17 +129,22 @@ public class AnvilRecipe implements IRecipe<AnvilInventory> {
             int cost = 4;
             JsonElement costObj = json.get("cost");
             if(costObj != null) {
-                cost = costObj.getAsInt();
+                int val = costObj.getAsInt();
+                if(val >= 0)
+                    cost = val;
             }
 
             int itemCost = 1;
-            if(!first.hasNoMatchingItems())
+            if(first.hasNoMatchingItems())
+                LOGGER.warn("Anvil recipe: " + recipeId + ": no items that satisfy the first ingredient.");
+            else
                 itemCost = first.getMatchingStacks()[0].getCount();
 
             int materialCost = 1;
-            if(!second.hasNoMatchingItems()) {
+            if(second.hasNoMatchingItems())
+                LOGGER.warn("Anvil recipe: " + recipeId + ": no items that satisfy the second ingredient.");
+            else
                 materialCost = second.getMatchingStacks()[0].getCount();
-            }
 
             return new AnvilRecipe(recipeId, first, second, output, cost, materialCost, itemCost);
         }

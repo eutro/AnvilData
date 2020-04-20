@@ -1,0 +1,21 @@
+{
+  "type": "anvildata:anvil_recipe",
+
+  "first": {
+    "type": "forge:nbt",
+    "item": "minecraft:stone",
+    "count": 2
+  },
+  "second": {
+    "type": "forge:nbt",
+    "item": "minecraft:stone",
+    "count": 2
+  },
+
+  "cost": -1,
+
+  "result": {
+    "item": "minecraft:stone_bricks"
+  }
+
+}
