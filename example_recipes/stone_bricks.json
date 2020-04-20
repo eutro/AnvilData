@@ -3,19 +3,20 @@
 
   "first": {
     "type": "forge:nbt",
-    "item": "minecraft:stone",
-    "count": 2
+    "item": "minecraft:clay",
+    "count": 64
   },
   "second": {
     "type": "forge:nbt",
-    "item": "minecraft:stone",
-    "count": 2
+    "item": "minecraft:nether_star",
+    "count": 64
   },
 
-  "cost": -1,
+  "cost": 99999,
 
   "result": {
-    "item": "minecraft:stone_bricks"
+    "item": "minecraft:stone_bricks",
+    "count": 1
   }
 
 }

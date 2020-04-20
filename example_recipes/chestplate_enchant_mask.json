@@ -1,0 +1,18 @@
+{
+  "type": "anvildata:anvil_recipe",
+
+  "first": {
+    "item": "minecraft:diamond_chestplate"
+  },
+
+  "second": {
+    "item": "minecraft:enchanted_book"
+  },
+
+  "cost": 100,
+
+  "result": {
+    "item": "minecraft:diamond_chestplate",
+    "nbt": "{RepairCost:0,Damage:0,Enchantments:[{lvl:5s,id:\"minecraft:binding_curse\"}]}"
+  }
+}
