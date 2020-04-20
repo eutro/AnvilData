@@ -67,7 +67,7 @@ minecraft {
 
             mods {
                 anvildata {
-                    source sourceSets.main
+                    sources sourceSets.main, sourceSets.test
                 }
             }
         }
@@ -83,7 +83,7 @@ minecraft {
 
             mods {
                 anvildata {
-                    source sourceSets.main
+                    sources sourceSets.main, sourceSets.test
                 }
             }
         }
