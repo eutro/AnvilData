@@ -27,6 +27,7 @@ Here's an example for a recipe that crafts a coal block using 1 coal in the firs
 ```
 
 Here is the result:
+
 ![](pictures/coal_example.png)
 
 ### What it all means
