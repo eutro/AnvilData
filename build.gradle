@@ -11,7 +11,7 @@ buildscript {
 
 apply plugin: 'net.minecraftforge.gradle'
 
-version = modVersion
+version = "${major}.${minor}.${patch}"
 group = modGroup
 archivesBaseName = modBaseName
 
