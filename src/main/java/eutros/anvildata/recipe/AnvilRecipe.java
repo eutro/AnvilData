@@ -116,6 +116,11 @@ public class AnvilRecipe implements IRecipe<AnvilInventory> {
         return TYPE;
     }
 
+    @Override
+    public boolean isDynamic() {
+        return true;
+    }
+
     public int getMaterialCost() {
         return materialCost;
     }
