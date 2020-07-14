@@ -2,7 +2,8 @@ package eutros.anvildata.recipe;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import eutros.anvildata.Reference;
+import eutros.anvildata.AnvilData;
+import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
@@ -24,22 +25,19 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 public class AnvilRecipe implements IRecipe<AnvilInventory> {
 
-    private static final ResourceLocation serializerID = new ResourceLocation(Reference.MOD_ID, "anvil_recipe");
+    private static final ResourceLocation serializerID = new ResourceLocation(AnvilData.MOD_ID, "anvil_recipe");
     public static final IRecipeSerializer<AnvilRecipe> SERIALIZER = new Serializer();
 
     private static final Logger LOGGER = LogManager.getLogger();
 
     public static final IRecipeType<AnvilRecipe> TYPE =
-            new IRecipeType<AnvilRecipe>() {
-                public String toString() {
-                    return serializerID.toString();
-                }
-            };
-
-    static {
-        SERIALIZER.setRegistryName(serializerID);
-        Registry.register(Registry.RECIPE_TYPE, serializerID, TYPE);
-    }
+            Registry.register(Registry.RECIPE_TYPE, serializerID,
+                    new IRecipeType<AnvilRecipe>() {
+                        public String toString() {
+                            return String.format("AnvilRecipeType(%s)", serializerID.toString());
+                        }
+                    }
+            );
 
     private final Pair<Ingredient, Ingredient> ingredients;
     private final ItemStack output;
@@ -129,10 +127,14 @@ public class AnvilRecipe implements IRecipe<AnvilInventory> {
         return itemCost;
     }
 
+    @ParametersAreNonnullByDefault
+    @MethodsReturnNonnullByDefault
     private static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<AnvilRecipe> {
 
-        @ParametersAreNonnullByDefault
-        @Nonnull
+        public Serializer() {
+            setRegistryName(serializerID);
+        }
+
         @Override
         public AnvilRecipe read(ResourceLocation recipeId, JsonObject json) {
             Ingredient first = CraftingHelper.getIngredient(json.get("first"));
@@ -149,21 +151,19 @@ public class AnvilRecipe implements IRecipe<AnvilInventory> {
 
             int itemCost = 1;
             if(first.hasNoMatchingItems())
-                LOGGER.warn("Anvil recipe: " + recipeId + ": no items that satisfy the first ingredient.");
+                LOGGER.warn("Anvil recipe: {}: no items that satisfy the first ingredient.", recipeId);
             else
                 itemCost = first.getMatchingStacks()[0].getCount();
 
             int materialCost = 1;
             if(second.hasNoMatchingItems())
-                LOGGER.warn("Anvil recipe: " + recipeId + ": no items that satisfy the second ingredient.");
+                LOGGER.warn("Anvil recipe: {}: no items that satisfy the second ingredient.", recipeId);
             else
                 materialCost = second.getMatchingStacks()[0].getCount();
 
             return new AnvilRecipe(recipeId, first, second, output, cost, materialCost, itemCost);
         }
 
-        @ParametersAreNonnullByDefault
-        @Nullable
         @Override
         public AnvilRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
             return new AnvilRecipe(recipeId,
@@ -175,15 +175,14 @@ public class AnvilRecipe implements IRecipe<AnvilInventory> {
                     buffer.readVarInt());
         }
 
-        @ParametersAreNonnullByDefault
         @Override
         public void write(PacketBuffer buffer, AnvilRecipe recipe) {
             CraftingHelper.write(buffer, recipe.getLeft());
             CraftingHelper.write(buffer, recipe.getRight());
-            buffer.writeItemStack(recipe.output);
-            buffer.writeVarInt(recipe.getCost());
-            buffer.writeVarInt(recipe.getMaterialCost());
-            buffer.writeVarInt(recipe.getItemCost());
+            buffer.writeItemStack(recipe.output)
+                    .writeVarInt(recipe.getCost())
+                    .writeVarInt(recipe.getMaterialCost())
+                    .writeVarInt(recipe.getItemCost());
         }
 
     }

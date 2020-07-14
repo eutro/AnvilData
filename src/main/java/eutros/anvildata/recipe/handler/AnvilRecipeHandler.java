@@ -1,38 +1,37 @@
 package eutros.anvildata.recipe.handler;
 
-import eutros.anvildata.Reference;
 import eutros.anvildata.recipe.AnvilInventory;
 import eutros.anvildata.recipe.AnvilRecipe;
-import net.minecraft.item.crafting.RecipeManager;
+import net.minecraft.world.World;
 import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.event.world.WorldEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber(modid = Reference.MOD_ID)
+import javax.annotation.Nullable;
+
 public class AnvilRecipeHandler {
 
-    private static RecipeManager recipeManager;
+    @Nullable
+    private World world;
 
-    @SubscribeEvent(priority = EventPriority.LOW) // allow shadowing of other recipes
-    public static void onAnvilChange(AnvilUpdateEvent evt) {
+    public void onAnvilChange(AnvilUpdateEvent evt) {
         AnvilInventory inv = new AnvilInventory(evt.getLeft(), evt.getRight());
 
-        //noinspection ConstantConditions world is actually nullable for our use
-        recipeManager.getRecipe(AnvilRecipe.TYPE, inv, null).ifPresent(recipe -> {
-            if(evt.getLeft().getCount() == recipe.getItemCost() &&
-                    evt.getRight().getCount() >= recipe.getMaterialCost()) {
-                evt.setOutput(recipe.getCraftingResult(inv));
-                evt.setCost(recipe.getCost());
-                evt.setMaterialCost(recipe.getMaterialCost());
-            }
-        });
+        if(world == null) return;
+
+        world.getRecipeManager()
+                .getRecipe(AnvilRecipe.TYPE, inv, world)
+                .ifPresent(recipe -> {
+                    if(evt.getLeft().getCount() == recipe.getItemCost() &&
+                            evt.getRight().getCount() >= recipe.getMaterialCost()) {
+                        evt.setOutput(recipe.getCraftingResult(inv));
+                        evt.setCost(recipe.getCost());
+                        evt.setMaterialCost(recipe.getMaterialCost());
+                    }
+                });
     }
 
-    @SubscribeEvent
-    public static void onWorldLoad(WorldEvent.Load evt) {
-        recipeManager = evt.getWorld().getWorld().getRecipeManager();
+    public void onWorldLoad(WorldEvent.Load evt) {
+        world = evt.getWorld().getWorld();
     }
 
 }

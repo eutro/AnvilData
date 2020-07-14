@@ -1,6 +1,6 @@
 package eutros.anvildata.integration;
 
-import eutros.anvildata.Reference;
+import eutros.anvildata.AnvilData;
 import eutros.anvildata.recipe.AnvilRecipe;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 @JeiPlugin
 public class JEIAnvilDataPlugin implements IModPlugin {
 
-    private static final ResourceLocation UID = new ResourceLocation(Reference.MOD_ID, "jei_plugin");
+    private static final ResourceLocation UID = new ResourceLocation(AnvilData.MOD_ID, "jei_plugin");
 
     @Nonnull
     @Override
